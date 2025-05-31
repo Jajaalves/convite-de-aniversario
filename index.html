@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Festa da Melissa - Convite Interativo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+    /* Reset e estilos base */
+    * {
+      margin: 0;
+    
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+   font-family: 'Patrick Hand', cursive;
+      background: url('Minnie\ Vestido\ Vermelho\ Moldura\ PNG\ -\ Imagem\ Legal.jpg') no-repeat center center fixed; /* Coloque a URL da imagem da Minnie aqui */
+      background-size: cover;
+      color: #4b1d3f;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 0 1rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    /* Animação de fundo */
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 50%; }
+      25% { background-position: 50% 100%; }
+      50% { background-position: 100% 50%; }
+      75% { background-position: 50% 0%; }
+    }
+
+    /* Cabeçalho */
+    header {
+      width: 100%;
+      max-width: 700px;
+      background: #f691a0;
+      color: #fff;
+      border-radius: 0 0 50px 50px;
+      padding: 2.5rem 1.5rem 3rem;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(231, 45, 91, 0.8);
+      filter: drop-shadow(0 0 12px #d43d66cc);
+      animation: fadeInDown 1.5s ease forwards;
+      user-select: none;
+    }
+
+    header h1 {
+      font-size: 3.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+      animation: popIn 1.4s ease forwards;
+      transform-origin: center bottom;
+    }
+
+    header p {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.35);
+      animation: popIn 1.4s ease forwards;
+      animation-delay: 0.4s;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    /* Foto circular da Melissa */
+    .circle-photo {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 6px 26px rgba(212, 61, 102, 0.9);
+      border: 5px solid #d43d66;
+      background: white;
+      margin: 2rem auto;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .circle-photo:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 40px rgba(255, 77, 114, 0.95);
+    }
+    .circle-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Conteúdo principal */
+    main {
+      width: 100%;
+      max-width: 650px;
+      animation: fadeIn 2.2s ease forwards;
+      opacity: 0;
+    }
+
+    /* Card de confirmação */
+    .card {
+      background: #fff0f5;
+      padding: 2.2rem 2.8rem;
+      border-radius: 32px;
+      box-shadow: 0 16px 40px rgba(212, 61, 102, 0.35);
+      margin-bottom: 3rem;
+      border: 5px solid #d43d66;
+      animation: popUp 1.2s ease forwards;
+      box-sizing: border-box;
+      user-select: auto;
+    }
+
+    .card h2 {
+      text-align: center;
+      color: #d43d66;
+      margin-bottom: 2rem;
+      font-weight: 900;
+      font-size: 2.4rem;
+      letter-spacing: 0.06em;
+      text-shadow: 1px 1px 6px #f56c98;
+      animation: flicker 3.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes flicker {
+      0% {opacity: 1;}
+      50% {opacity: 0.7;}
+      100% {opacity: 1;}
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 800;
+      color: #a52b57;
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      text-shadow: 1px 0 2px #db2565cc;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 1.6rem;
+      border: 3px solid #f7a6be;
+      border-radius: 24px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #691f40;
+      background: #fff0f5;
+      box-shadow: inset 0 3px 10px #f8c0da;
+      text-shadow: 0 0 3px #b85a7a;
+      font-family: 'Patrick Hand', cursive;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      user-select: auto;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      outline: none;
+      border-color: #fe4a8a;
+      background: #ffd9e8;
+      box-shadow: 0 0 18px #fe4a8a;
+    }
+
+    form button {
+      background: #d43d66;
+      color: #fff5fb;
+      border: none;
+      padding: 1.4rem 3rem;
+      border-radius: 50px;
+      font-size: 1.6rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.6s cubic-bezier(.68,-0.55,.27,1.55), transform 0.3s ease;
+      box-shadow: 0 12px 40px rgba(212, 61, 102, 0.9);
+      font-family: 'Patrick Hand', cursive;
+      letter-spacing: 0.08em;
+      display: block;
+      margin: 0 auto;
+      text-shadow: 0 0 6px #ff3462;
+      user-select: none;
+    }
+
+    form button:hover,
+    form button:focus {
+      background: #bc2f59;
+      transform: scale(1.2) rotate(-3deg);
+      box-shadow: 0 18px 50px rgba(255, 52, 98, 1);
+      text-shadow: 0 0 14px #ff2d6c;
+    }
+
+    /* Listas de convidados e presentes */
+    .guest-list,
+    .gift-list {
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 2rem 2.5rem;
+      background: #ffdce6;
+      border-radius: 32px;
+      box-shadow: 0 14px 30px rgba(212, 61, 102, 0.3);
+      animation: fadeInUp 1.8s ease forwards;
+      border: 4px solid #d53e6d;
+      margin-bottom: 2rem;
+      opacity: 0;
+      font-family: 'Patrick Hand', cursive;
+      user-select: none;
+    }
+
+    .guest-list h2,
+    .gift-list h2 {
+      text-align: center;
+      color: #a52b57;
+      margin-bottom: 1.5rem;
+      font-weight: 900;
+      font-size: 2.1rem;
+      letter-spacing: 0.06em;
+      text-shadow: 1px 1px 6px #ea8cb8;
+    }
+
+    .guest-list ul,
+    .gift-list ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1.3rem;
+      color: #5a253d;
+      font-weight: 800;
+      line-height: 1.6;
+      user-select: text;
+      cursor: default;
+    }
+
+    .guest-list li,
+    .gift-list li {
+      background: #fff1fa;
+      padding: 1.2rem 1.6rem;
+      margin-bottom: 1rem;
+      border-radius: 24px;
+      box-shadow: inset 0 6px 16px rgb(212 61 102 / 0.25);
+      transition: all 0.35s ease;
+      cursor: default;
+      border: 3px solid transparent;
+      font-size: 1.3rem;
+    }
+
+    .guest-list li:hover,
+    .gift-list li:hover {
+      transform: scale(1.14) rotate(2deg);
+      background: #ffadd2;
+      border-color: #d43d66;
+      box-shadow: 0 9px 30px rgba(212, 61, 102, 0.9);
+      position: relative;
+      z-index: 8;
+      color: #480931;
+      text-shadow: 0 0 7px #ff69abcc;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    /* Rodapé */
+    footer {
+      text-align: center;
+      padding: 2.3rem 1rem;
+      background: #d43d66;
+      color: white;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+      margin-top: 3rem;
+      animation: fadeInUp 2.7s ease forwards;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 0.07em;
+      font-family: 'Patrick Hand', cursive;
+      user-select: none;
+      text-shadow: 1px 1px 6px #8a2143;
+      box-shadow: inset 0 -5px 25px #b12d63cc;
+    }
+
+    /* Animação dos balões */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 70px;
+      height: 90px;
+      background: radial-gradient(circle, #d43d66 65%, #a52b57 100%);
+      border-radius: 55% 55% 60% 60% / 70% 70% 40% 40%;
+      box-shadow: 0 8px 18px rgba(212, 61, 102, 0.8);
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 10px #f43c6e);
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 50%;
+      width: 4px;
+      height: 24px;
+      background: #a52b57;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      filter: drop-shadow(0 0 6px #7a2045);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(-370px) translateX(30px);
+      }
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
+
+    /* Animações gerais */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-55px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(55px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) rotate(-5deg);
+      }
+      60% {
+        transform: scale(1.1) rotate(5deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    @keyframes popUp {
+      0% {
+        opacity: 0;
+        transform: scale(0.65);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    
+    <h1>🎀 Festa da Melissa 🎉</h1>
+    <p>Venha comemorar o aniversário da nossa amada Melissa!</p>
+    <p><strong>📅 Data:</strong> 10 de agosto de 2025</p>
+    <p><strong>⏰ Hora:</strong> 11:00</p>
+    <div id="contador" style="
+      display: inline-block;
+      background: #fff0f5;
+      color: #d43d66;
+      border-radius: 20px;
+      padding: 0.8rem 1.5rem;
+      margin: 1.5rem auto 0 auto;
+      font-size: 1.4rem;
+      font-weight: 900;
+      box-shadow: 0 4px 15px rgba(212, 61, 102, 0.85);
+      min-width: 230px;
+      font-family: 'Patrick Hand', cursive;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 3px #ff87ab;
+    ">
+      <span id="dias">00</span>d :
+      <span id="horas">00</span>h :
+      <span id="minutos">00</span>m :
+      <span id="segundos">00</span>s
+    </div>
+  </header>
+
+  <div class="circle-photo" tabindex="0" aria-label="Foto circular da Melissa">
+    <img src="foto da mel.jpeg" alt="Foto da Melissa" />
+  </div>
+
+  <main>
+    <div class="card" tabindex="0" aria-label="Confirmação de presença">
+      <h2>Confirme sua Presença</h2>
+      <form id="guestForm" aria-label="Formulário para confirmar presença">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" placeholder="Digite seu nome" required aria-required="true" autocomplete="name" />
+        <label for="message">Mensagem:</label>
+        <textarea id="message" name="message" placeholder="Deixe uma mensagem para a Melissa (opcional)" rows="3"></textarea>
+        <button type="submit" aria-label="Enviar confirmação">Enviar 🥳</button>
+      </form>
+    </div>
+
+    <div class="guest-list" aria-live="polite" aria-atomic="true" tabindex="0" aria-label="Lista de convidados">
+      <h2>Lista de Convidados</h2>
+      <ul id="guestList"></ul>
+    </div>
+
+    <div class="gift-list" aria-label="Sugestões de presente para Melissa" tabindex="0">
+      <h2>Dicas de Presentes para Melissa 🎁</h2>
+      <ul>
+        <li>🎀 Laços Vermelhos e Brancos</li>
+        <li>🎀 Vestidos Estampados com Bolinhas</li>
+        <li>🎀 Sapatos Rosa com Laços</li>
+        <li>🎀 Bonecas de Pelúcia da Disney</li>
+        <li>🎀 Livros de Histórias Disney</li>
+        <li>🎀 Jogo da Memória da Minnie</li>
+        <li>🎀 Kit de Pintura e Colorir</li>
+        <li>🎀 Pelúcias dos Amigos da Minnie</li>
+      </ul>
+    </div>
+
+    <button onclick="mostrarPix()" aria-label="Mostrar informações para enviar Pix"
+      style="
+        background: #d43d66;
+        color: white;
+        border: none;
+        padding: 1.2rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        font-weight: 900;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+        display: block;
+        margin: 3rem auto 0;
+        font-family: 'Patrick Hand', cursive;
+        letter-spacing: 0.05em;
+        box-shadow: 0 8px 25px rgba(212, 61, 102, 0.9);
+        user-select: none;
+        text-shadow: 0 0 10px #ff4a7c;
+      ">
+      ✅💸 Enviar Pix para Presentes
+    </button>
+  </main>
+
+  <footer>
+    <p>🎀 Obrigado por celebrar esse dia mágico com a Melissa! 🎀</p>
+  </footer>
+
+  <script>
+    // Manipulação da lista de convidados com localStorage
+    const form = document.getElementById('guestForm');
+    const guestList = document.getElementById('guestList');
+
+    function salvarListaConvidados(lista) {
+      localStorage.setItem('listaConvidados', JSON.stringify(lista));
+    }
+
+    function carregarListaConvidados() {
+      const listaSalva = localStorage.getItem('listaConvidados');
+      return listaSalva ? JSON.parse(listaSalva) : [];
+    }
+
+    function renderizarLista() {
+      guestList.innerHTML = '';
+      convidados.forEach(({nome, mensagem}) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${nome}</strong>${mensagem ? ': ' + mensagem : ''}`;
+        guestList.appendChild(li);
+      });
+    }
+
+    let convidados = carregarListaConvidados();
+    renderizarLista();
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = form.name.value.trim();
+      const mensagem = form.message.value.trim();
+
+      if (nome) {
+        convidados.push({ nome, mensagem });
+        salvarListaConvidados(convidados);
+        renderizarLista();
+        form.reset();
+      } else {
+        alert('Por favor, insira seu nome.');
+      }
+    });
+
+    // Contador regressivo
+    const evento = new Date('2025-08-10T11:00:00-03:00');
+    function atualizarContador() {
+      const agora = new Date();
+      const diff = evento - agora;
+
+      if (diff <= 0) {
+        const contadorDiv = document.getElementById('contador');
+        contadorDiv.textContent = "🎉 É dia da Melissa! 🎉";
+        contadorDiv.style.animation = 'popIn 1s ease forwards';
+        return;
+      }
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('dias').textContent = dias.toString().padStart(2, '0');
+      document.getElementById('horas').textContent = horas.toString().padStart(2, '0');
+      document.getElementById('minutos').textContent = minutos.toString().padStart(2, '0');
+      document.getElementById('segundos').textContent = segundos.toString().padStart(2, '0');
+    }
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // Animação de balões
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.left = Math.random() * window.innerWidth + 'px';
+      balloon.style.animationDuration = 5 + Math.random() * 5 + 's';
+      balloon.style.filter = `hue-rotate(${Math.random() * 360}deg) drop-shadow(0 0 12px hsl(${Math.random() * 360}, 80%, 65%))`;
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 9000);
+    }
+    setInterval(createBalloon, 700);
+
+    // Mostrar Pix
+    let chavePix = "(88)98218-0656";
+    let nomePix = "Fabiana da Silva de Lemos";
+
+    function mostrarPix() {
+      let pixInfo = document.getElementById("pixInfo");
+
+      if (!pixInfo) {
+        pixInfo = document.createElement("div");
+        pixInfo.id = "pixInfo";
+        pixInfo.style.cssText = `
+          background: #fff0f6;
+          padding: 1.5rem 1.8rem;
+          margin: 3rem auto 1rem;
+          border-radius: 30px;
+          text-align: center;
+          max-width: 340px;
+          box-shadow: 0 10px 30px rgba(212, 61, 102, 0.7);
+          font-family: 'Patrick Hand', cursive;
+          font-weight: 800;
+          color: #a52b57;
+          letter-spacing: 0.03em;
+          border: 4px solid #d43d66;
+          user-select: all;
+          cursor: pointer;
+          text-shadow: 0 0 8px #ff4279;
+          transition: background-color 0.4s ease;
+          font-size: 1.5rem;
+          font-weight: 900;
+        `;
+
+        pixInfo.innerHTML = `
+          <p>Chave Pix:</p>
+          <p style="margin: 0.3rem 0 1rem 0;">${chavePix}</p>
+          <p>Nome:</p>
+          <p>${nomePix}</p>
+          <p style="font-size: 1rem; color: #c65f81; margin-top: 1rem;">Clique para copiar a chave Pix 🧾</p>
+        `;
+
+        pixInfo.title = "Clique para copiar a chave Pix";
+        pixInfo.addEventListener("click", () => {
+          navigator.clipboard.writeText(chavePix).then(() => {
+            pixInfo.style.backgroundColor = "#ffadd9";
+            alert("Chave Pix copiada!");
+            setTimeout(() => pixInfo.style.backgroundColor = "#fff0f6", 1400);
+          });
+        });
+
+        document.body.appendChild(pixInfo);
+      } else {
+        pixInfo.style.display = "block";
+      }
+
+      navigator.clipboard.writeText(chavePix).then(() => {
+        console.log("Chave Pix copiada!");
+      });
+
+      pixInfo.scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
+
+
